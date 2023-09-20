@@ -1,0 +1,39 @@
+﻿@model QuoteGenerator.Models.Quote
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="position-absolute top-50 start-50 translate-middle border rounded ">
+    <h1 class="bg-danger text-light border py-3 px-3 rounded">Random Quote Generator</h1>
+    <p id="quoteText" class="py-3 px-3 bg-secondary-emphasis">@Model.Text</p>
+    <button class="position-absolute top-100 start-50 translate-middle rounded  text-light btn btn-danger " id="click">Click Me</button>
+</div>
+<script>
+   document.addEventListener("keydown", e => {
+        if (e.key == 'Enter'){
+            e.preventDefault();
+           getRandomQuote();
+        }
+    });
+
+    const click = document.getElementById('click');
+    click.addEventListener('click', e => {
+        e.preventDefault();
+        getRandomQuote();
+    })
+
+    function getRandomQuote(){
+        fetch('/Home/GetRandomQuoteAction')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('quoteText').textContent = data.text;
+        }).catch(error => console.error ('Error', error))
+    }
+
+    function gettingQuote() {
+        getRandomQuote();
+        setTimeout(gettingQuote, 5000);
+    }
+
+    gettingQuote();
+</script>
